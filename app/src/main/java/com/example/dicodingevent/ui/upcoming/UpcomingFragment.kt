@@ -34,7 +34,7 @@ class UpcomingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         rvVerticalEvents = binding.rvVerticalEvents
-        rvVerticalEvents.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvVerticalEvents.layoutManager = LinearLayoutManager(context)
 
         viewModel.events.observe(viewLifecycleOwner) { events ->
             verticalEventAdapter = VerticalEventAdapter(events)

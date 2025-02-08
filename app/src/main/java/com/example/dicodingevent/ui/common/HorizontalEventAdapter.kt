@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
-import com.example.dicodingevent.R
 import com.example.dicodingevent.databinding.ItemEventHorizontalBinding
 import com.example.dicodingevent.models.Event
 
@@ -27,10 +26,7 @@ class HorizontalEventAdapter(private val events: List<Event>) :
     class EventViewHolder(private val binding: ItemEventHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(event: Event) {
-            binding.ivEvent.load(event.imageLogo) {
-                placeholderMemoryCacheKey(event.imageLogo)
-                error(R.drawable.ic_launcher_background)
-            }
+            binding.ivEvent.load(event.mediaCover)
         }
     }
 }

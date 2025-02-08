@@ -26,7 +26,7 @@ class FinishedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFinishedBinding.inflate(inflater, container, false)
         return binding.root
     }

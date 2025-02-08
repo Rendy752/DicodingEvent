@@ -4,35 +4,88 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.dicodingevent.data.ApiConfig
 import com.example.dicodingevent.databinding.FragmentHomeBinding
+import com.example.dicodingevent.repository.EventRepository
+import com.example.dicodingevent.ui.common.HorizontalEventAdapter
+import com.example.dicodingevent.ui.common.VerticalEventAdapter
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private lateinit var rvUpcomingEvents: RecyclerView
+    private lateinit var rvFinishedEvents: RecyclerView
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var horizontalEventAdapter: HorizontalEventAdapter
+    private lateinit var verticalEventAdapter: VerticalEventAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        return root
+    private lateinit var binding: FragmentHomeBinding
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(EventRepository(ApiConfig.apiService))
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadUpcomingEvents()
+        loadFinishedEvents()
+    }
+
+    private fun loadUpcomingEvents() {
+        rvUpcomingEvents = binding.rvUpcomingEvents
+        rvUpcomingEvents.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        viewModel.upcomingEvents.observe(viewLifecycleOwner) { events ->
+            horizontalEventAdapter = HorizontalEventAdapter(events)
+            rvUpcomingEvents.adapter = horizontalEventAdapter
+
+            if (events.isEmpty()) {
+                binding.emptyUpcomingItem.root.visibility = View.VISIBLE
+            } else {
+                binding.emptyUpcomingItem.root.visibility = View.GONE
+            }
+        }
+
+        viewModel.isLoadingUpcoming.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.loadingUpcoming.root.visibility = View.VISIBLE
+            } else {
+                binding.loadingUpcoming.root.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun loadFinishedEvents() {
+        rvFinishedEvents = binding.rvFinishedEvents
+        rvFinishedEvents.layoutManager = LinearLayoutManager(context)
+
+        viewModel.finishedEvents.observe(viewLifecycleOwner) { events ->
+            verticalEventAdapter = VerticalEventAdapter(events)
+            rvFinishedEvents.adapter = verticalEventAdapter
+
+            if (events.isEmpty()) {
+                binding.emptyFinishedItem.root.visibility = View.VISIBLE
+            } else {
+                binding.emptyFinishedItem.root.visibility = View.GONE
+            }
+        }
+
+        viewModel.isLoadingFinished.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.loadingFinished.root.visibility = View.VISIBLE
+            } else {
+                binding.loadingFinished.root.visibility = View.GONE
+            }
+        }
     }
 }
