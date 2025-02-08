@@ -9,4 +9,6 @@
     <string name="no_items_found">No items found</string>
     <string name="event_name">Event Name</string>
     <string name="event_image">Event Image</string>
+    <string name="search_event">Search Event</string>
+    <string name="search_icon">Search Icon</string>
 </resources>
