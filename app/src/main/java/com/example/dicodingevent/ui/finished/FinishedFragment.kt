@@ -40,13 +40,21 @@ class FinishedFragment : Fragment() {
         viewModel.events.observe(viewLifecycleOwner) { events ->
             verticalEventAdapter = VerticalEventAdapter(events)
             rvVerticalEvents.adapter = verticalEventAdapter
+
+            if (events.isEmpty()) {
+                binding.emptyItem.root.visibility = View.VISIBLE
+                binding.searchBar.root.visibility = View.GONE
+            } else {
+                binding.emptyItem.root.visibility = View.GONE
+                binding.searchBar.root.visibility = View.VISIBLE
+            }
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
-                // Show loading indicator
+                binding.loading.root.visibility = View.VISIBLE
             } else {
-                // Hide loading indicator
+                binding.loading.root.visibility = View.GONE
             }
         }
     }

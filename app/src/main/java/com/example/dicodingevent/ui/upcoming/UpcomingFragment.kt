@@ -39,14 +39,19 @@ class UpcomingFragment : Fragment() {
         viewModel.events.observe(viewLifecycleOwner) { events ->
             verticalEventAdapter = VerticalEventAdapter(events)
             rvVerticalEvents.adapter = verticalEventAdapter
+
+            if (events.isEmpty()) {
+                binding.emptyItem.root.visibility = View.VISIBLE
+            } else {
+                binding.emptyItem.root.visibility = View.GONE
+            }
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            // Show/hide your loading indicator based on isLoading value
             if (isLoading) {
-                // Show loading indicator
+                binding.loading.root.visibility = View.VISIBLE
             } else {
-                // Hide loading indicator
+                binding.loading.root.visibility = View.GONE
             }
         }
     }
