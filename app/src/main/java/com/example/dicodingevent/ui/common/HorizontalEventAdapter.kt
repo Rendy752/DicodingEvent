@@ -27,6 +27,7 @@ class HorizontalEventAdapter(private val events: List<Event>) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(event: Event) {
             binding.ivEvent.load(event.mediaCover)
+            binding.tvName.text = event.name
         }
     }
 }

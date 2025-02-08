@@ -7,4 +7,6 @@
     <string name="finished_events">Finished Events</string>
     <string name="dicoding_event">Dicoding Event</string>
     <string name="no_items_found">No items found</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_image">Event Image</string>
 </resources>
