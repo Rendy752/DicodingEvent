@@ -1,6 +1,5 @@
 package com.example.dicodingevent.ui.upcoming
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,14 +25,10 @@ class UpcomingViewModel(private val repository: EventRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 val fetchedEvents = repository.getUpcomingEvents()
-                Log.d("UpcomingViewModel", "Fetched events: $fetchedEvents")
                 _events.value = fetchedEvents
             } catch (e: Exception) {
-                Log.e("UpcomingViewModel", "Error loading events", e)
-                println("Error loading events: ${e.message}")
                 _events.value = emptyList()
             } finally {
-                Log.d("UpcomingViewModel", "Finished loading events")
                 _isLoading.value = false
             }
         }
