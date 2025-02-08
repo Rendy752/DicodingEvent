@@ -7,6 +7,7 @@
 
     <include layout="@layout/search_bar" />
 
+    <include layout="@layout/empty_item" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvVerticalEvents"
         android:layout_width="match_parent"
