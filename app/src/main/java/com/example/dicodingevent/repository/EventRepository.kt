@@ -32,7 +32,7 @@ class EventRepository @Inject constructor(private val apiService: ApiService) {
     }
 
 
-    suspend fun getEventDetail(id: Int): Event? = withContext(Dispatchers.IO) {
+    suspend fun getEventDetail(id: String): Event? = withContext(Dispatchers.IO) {
         try {
             val response = apiService.getEventDetail(id)
             if (!response.error) {
