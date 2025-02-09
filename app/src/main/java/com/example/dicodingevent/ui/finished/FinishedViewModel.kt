@@ -6,18 +6,32 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dicodingevent.models.Event
 import com.example.dicodingevent.repository.EventRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FinishedViewModel(private val repository: EventRepository) : ViewModel() {
 
-    private val _events = MutableLiveData<List<Event>>()
-    val events: LiveData<List<Event>> = _events
+    private val _events = MutableStateFlow<List<Event>>(emptyList())
+    val events: StateFlow<List<Event>> = _events.asStateFlow()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _queryState = MutableStateFlow(QueryState())
+    val queryState: StateFlow<QueryState> = _queryState.asStateFlow()
+
+    data class QueryState(val query: String = "")
+
     init {
         loadEvents()
+    }
+
+    fun updateQuery(query: String) {
+        _queryState.value = queryState.value.copy(query = query)
+        searchEvents(query)
     }
 
     private fun loadEvents() {
@@ -36,6 +50,7 @@ class FinishedViewModel(private val repository: EventRepository) : ViewModel() {
     }
 
     fun searchEvents(query: String?) {
+        _queryState.update { it.copy(query = query ?: "") }
         _isLoading.value = true
         viewModelScope.launch {
             try {
