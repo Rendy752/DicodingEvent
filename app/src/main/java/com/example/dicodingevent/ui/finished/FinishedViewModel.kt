@@ -34,4 +34,19 @@ class FinishedViewModel(private val repository: EventRepository) : ViewModel() {
             }
         }
     }
+
+    fun searchEvents(query: String?) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val fetchedEvents = repository.getFinishedEvents(query = query)
+                _events.value = fetchedEvents
+            } catch (e: Exception) {
+                println("Error loading events: ${e.message}")
+                _events.value = emptyList()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 }
