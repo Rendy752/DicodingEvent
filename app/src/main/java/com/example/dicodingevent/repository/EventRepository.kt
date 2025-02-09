@@ -8,29 +8,30 @@ import javax.inject.Inject
 
 class EventRepository @Inject constructor(private val apiService: ApiService) {
 
-    suspend fun getUpcomingEvents(): List<Event> = withContext(Dispatchers.IO) {
-        return@withContext getEventsFromApi(1)
-    }
+    suspend fun getUpcomingEvents(query: String? = null, limit: Int? = 40): List<Event> =
+        getEventsFromApi(active = 1, query = query, limit = limit)
 
-    suspend fun getFinishedEvents(): List<Event> = withContext(Dispatchers.IO) {
-        return@withContext getEventsFromApi(0)
-    }
+    suspend fun getFinishedEvents(query: String? = null, limit: Int? = 40): List<Event> =
+        getEventsFromApi(active = 0, query = query, limit = limit)
 
-    private suspend fun getEventsFromApi(active: Int): List<Event> {
+    private suspend fun getEventsFromApi(
+        active: Int,
+        query: String? = null,
+        limit: Int? = 40
+    ): List<Event> = withContext(Dispatchers.IO) {
         try {
-            val response = apiService.getEvents(active = active)
-            if (!response.error) {
-                return response.listEvents
-            } else {
+            val response =
+                apiService.getEvents(active = active, q = query, limit = limit ?: 40)
+            if (response.error) {
                 println("API Error: ${response.message}")
-                return emptyList()
+                return@withContext emptyList()
             }
+            return@withContext response.listEvents
         } catch (e: Exception) {
             println("Network Error: ${e.message}")
-            return emptyList()
+            return@withContext emptyList()
         }
     }
-
 
     suspend fun getEventDetail(id: String): Event? = withContext(Dispatchers.IO) {
         try {

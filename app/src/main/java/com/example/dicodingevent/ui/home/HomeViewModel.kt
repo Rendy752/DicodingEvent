@@ -29,7 +29,7 @@ class HomeViewModel(private val repository: EventRepository) : ViewModel() {
         _isLoadingUpcoming.value = true
         viewModelScope.launch {
             try {
-                val fetchedEvents = repository.getUpcomingEvents()
+                val fetchedEvents = repository.getUpcomingEvents(limit = 5)
                 _upcomingEvents.value = fetchedEvents
             } catch (e: Exception) {
                 _upcomingEvents.value = emptyList()
@@ -43,7 +43,7 @@ class HomeViewModel(private val repository: EventRepository) : ViewModel() {
         _isLoadingFinished.value = true
         viewModelScope.launch {
             try {
-                val fetchedEvents = repository.getFinishedEvents()
+                val fetchedEvents = repository.getFinishedEvents(limit = 5)
                 _finishedEvents.value = fetchedEvents
             } catch (e: Exception) {
                 _finishedEvents.value = emptyList()
