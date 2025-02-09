@@ -12,9 +12,7 @@ import com.example.dicodingevent.data.ApiConfig
 import com.example.dicodingevent.databinding.FragmentFinishedBinding
 import com.example.dicodingevent.repository.EventRepository
 import com.example.dicodingevent.ui.common.VerticalEventAdapter
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class FinishedFragment : Fragment() {
     private lateinit var rvVerticalEvents: RecyclerView
     private lateinit var verticalEventAdapter: VerticalEventAdapter

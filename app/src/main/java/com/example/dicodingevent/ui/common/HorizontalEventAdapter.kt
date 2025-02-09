@@ -7,7 +7,10 @@ import coil3.load
 import com.example.dicodingevent.databinding.ItemEventHorizontalBinding
 import com.example.dicodingevent.models.Event
 
-class HorizontalEventAdapter(private val events: List<Event>) :
+class HorizontalEventAdapter(
+    private val events: List<Event>,
+    private val listener: (id: Int) -> Unit
+) :
     RecyclerView.Adapter<HorizontalEventAdapter.EventViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
@@ -19,6 +22,9 @@ class HorizontalEventAdapter(private val events: List<Event>) :
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = events[position]
         holder.bind(event)
+        holder.itemView.setOnClickListener {
+            listener(event.id)
+        }
     }
 
     override fun getItemCount(): Int = events.size

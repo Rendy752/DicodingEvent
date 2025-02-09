@@ -1,6 +1,5 @@
 package com.example.dicodingevent.ui.detail
 
-import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,8 +16,7 @@ class DetailViewModel(private val repository: EventRepository) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun loadEvents(intent: Intent?) {
-        val id = intent?.getStringExtra("id")
+    fun loadEvents(id: String?) {
         if (id != null) {
             getDetail(id)
         }

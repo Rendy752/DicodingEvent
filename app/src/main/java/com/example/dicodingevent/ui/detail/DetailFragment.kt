@@ -1,31 +1,75 @@
 package com.example.dicodingevent.ui.detail
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.dicodingevent.R
+import androidx.core.text.HtmlCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import coil3.load
+import com.example.dicodingevent.data.ApiConfig
+import com.example.dicodingevent.databinding.FragmentDetailBinding
+import com.example.dicodingevent.repository.EventRepository
 
 class DetailFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = DetailFragment()
-    }
-
-    private val viewModel: DetailViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
+    private lateinit var binding: FragmentDetailBinding
+    private val viewModel: DetailViewModel by viewModels {
+        DetailViewModelFactory(EventRepository(ApiConfig.apiService))
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        binding = FragmentDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fetchEventDetail()
+        observeEventDetail()
+    }
+
+    private fun fetchEventDetail() {
+        val eventId = arguments?.getString("id")
+        if (eventId != null) {
+            viewModel.loadEvents(eventId)
+        }
+    }
+
+    private fun observeEventDetail() {
+        viewModel.event.observe(viewLifecycleOwner) { event ->
+            if (event != null) {
+                binding.emptyItem.root.visibility = View.VISIBLE
+                binding.ivDetail.load(event.mediaCover)
+                binding.tvName.text = event.name
+                binding.tvSummary.text = event.summary
+                binding.tvDescription.text = HtmlCompat.fromHtml(
+                    event.description,
+                    HtmlCompat.FROM_HTML_MODE_LEGACY
+                )
+                binding.tvCategory.text = event.category
+                binding.tvOwner.text = event.ownerName
+                binding.tvCity.text = event.cityName
+                event.quota.toString().also { binding.tvQuota.text = it }
+                event.registrants.toString().also { binding.tvRegistrants.text = it }
+                binding.tvBeginTime.text = event.beginTime
+                binding.tvEndTime.text = event.endTime
+            } else {
+                binding.emptyItem.root.visibility = View.GONE
+            }
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.loading.root.visibility = View.VISIBLE
+                binding.emptyItem.root.visibility = View.GONE
+            } else {
+                binding.loading.root.visibility = View.GONE
+                binding.emptyItem.root.visibility = View.GONE
+            }
+        }
     }
 }

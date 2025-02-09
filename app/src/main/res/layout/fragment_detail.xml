@@ -10,8 +10,16 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <include
+            android:id="@+id/emptyItem"
+            layout="@layout/empty_item" />
+
+        <include
+            android:id="@+id/loading"
+            layout="@layout/loading_indicator" />
+
         <ImageView
-            android:id="@+id/ivEventDetail"
+            android:id="@+id/ivDetail"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:contentDescription="@string/event_image"
@@ -22,106 +30,105 @@
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView
-            android:id="@+id/tvEventName"
+            android:id="@+id/tvName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivEventDetail"
+            app:layout_constraintTop_toBottomOf="@id/ivDetail"
             tools:text="Event Name" />
 
         <TextView
-            android:id="@+id/tvEventSummary"
+            android:id="@+id/tvSummary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventName"
+            app:layout_constraintTop_toBottomOf="@id/tvName"
             tools:text="Event Summary" />
 
         <TextView
-            android:id="@+id/tvEventDescription"
+            android:id="@+id/tvDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventSummary"
+            app:layout_constraintTop_toBottomOf="@id/tvSummary"
             tools:text="Event Description" />
 
         <TextView
-            android:id="@+id/tvEventCategory"
+            android:id="@+id/tvCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventDescription"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription"
             tools:text="Category: Seminar" />
 
         <TextView
-            android:id="@+id/tvEventOwner"
+            android:id="@+id/tvOwner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventCategory"
+            app:layout_constraintTop_toBottomOf="@id/tvCategory"
             tools:text="By: elevAIte with Dicoding" />
 
         <TextView
-            android:id="@+id/tvEventCity"
+            android:id="@+id/tvCity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventOwner"
+            app:layout_constraintTop_toBottomOf="@id/tvOwner"
             tools:text="City: Online" />
 
         <TextView
-            android:id="@+id/tvEventQuota"
+            android:id="@+id/tvQuota"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventCity"
+            app:layout_constraintTop_toBottomOf="@id/tvCity"
             tools:text="Quota: 3000" />
 
         <TextView
-            android:id="@+id/tvEventRegistrants"
+            android:id="@+id/tvRegistrants"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventQuota"
+            app:layout_constraintTop_toBottomOf="@id/tvQuota"
             tools:text="Registrants: 97" />
 
         <TextView
-            android:id="@+id/tvEventBeginTime"
+            android:id="@+id/tvBeginTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventRegistrants"
+            app:layout_constraintTop_toBottomOf="@id/tvRegistrants"
             tools:text="Begin Time: 2025-02-11 15:30:00" />
 
         <TextView
-            android:id="@+id/tvEventEndTime"
+            android:id="@+id/tvEndTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventBeginTime"
+            app:layout_constraintTop_toBottomOf="@id/tvBeginTime"
             tools:text="End Time: 2025-02-11 17:00:00" />
 
         <Button
@@ -133,7 +140,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvEventEndTime" />
+            app:layout_constraintTop_toBottomOf="@id/tvEndTime" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
