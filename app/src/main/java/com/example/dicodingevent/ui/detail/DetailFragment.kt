@@ -10,9 +10,11 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil3.load
+import com.example.dicodingevent.R
 import com.example.dicodingevent.data.ApiConfig
 import com.example.dicodingevent.databinding.FragmentDetailBinding
 import com.example.dicodingevent.repository.EventRepository
+import com.example.dicodingevent.utils.Date
 
 class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
@@ -52,13 +54,10 @@ class DetailFragment : Fragment() {
                     event.description,
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
-                binding.tvCategory.text = event.category
-                binding.tvOwner.text = event.ownerName
-                binding.tvCity.text = event.cityName
-                event.quota.toString().also { binding.tvQuota.text = it }
-                event.registrants.toString().also { binding.tvRegistrants.text = it }
-                binding.tvBeginTime.text = event.beginTime
-                binding.tvEndTime.text = event.endTime
+                binding.tvOwner.text = getString(R.string.event_owner, event.ownerName)
+                val remainingQuota = event.quota - event.registrants
+                binding.tvRemainingQuota.text = getString(R.string.remaining_quota, remainingQuota)
+                binding.tvTime.text = getString(R.string.event_time, Date.formatDate(event.beginTime))
                 binding.btnRegister.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW).apply {
                         data = Uri.parse(event.link)

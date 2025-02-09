@@ -12,4 +12,7 @@
     <string name="search_event">Search Event</string>
     <string name="register">Register</string>
     <string name="title_detail">Detail</string>
+    <string name="event_owner">By: %1$s</string>
+    <string name="remaining_quota">Sisa kuota: %1$d</string>
+    <string name="event_time">Waktu acara: %1$s</string>
 </resources>
