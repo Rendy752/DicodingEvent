@@ -1,5 +1,7 @@
 package com.example.dicodingevent.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -57,6 +59,12 @@ class DetailFragment : Fragment() {
                 event.registrants.toString().also { binding.tvRegistrants.text = it }
                 binding.tvBeginTime.text = event.beginTime
                 binding.tvEndTime.text = event.endTime
+                binding.btnRegister.setOnClickListener {
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse(event.link)
+                    }
+                    startActivity(intent)
+                }
             } else {
                 binding.emptyItem.root.visibility = View.GONE
             }
