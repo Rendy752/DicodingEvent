@@ -1,6 +1,5 @@
 package com.example.dicodingevent.ui.finished
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,20 +20,17 @@ class FinishedViewModel(private val repository: EventRepository) : ViewModel() {
         loadEvents()
     }
 
-    fun loadEvents() {
+    private fun loadEvents() {
         _isLoading.value = true
         viewModelScope.launch {
             try {
                 val fetchedEvents = repository.getFinishedEvents()
                 _events.value = fetchedEvents
-                Log.d("FinishedViewModel", "Fetched events: $fetchedEvents")
             } catch (e: Exception) {
                 println("Error loading events: ${e.message}")
                 _events.value = emptyList()
-                Log.e("FinishedViewModel", "Error loading events: ${e.message}")
             } finally {
                 _isLoading.value = false
-                Log.d("FinishedViewModel", "Loading finished")
             }
         }
     }

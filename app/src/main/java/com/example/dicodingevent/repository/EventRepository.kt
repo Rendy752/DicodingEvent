@@ -1,6 +1,5 @@
 package com.example.dicodingevent.repository
 
-import android.util.Log
 import com.example.dicodingevent.data.ApiService
 import com.example.dicodingevent.models.Event
 import kotlinx.coroutines.Dispatchers
@@ -21,15 +20,12 @@ class EventRepository @Inject constructor(private val apiService: ApiService) {
         try {
             val response = apiService.getEvents(active = active)
             if (!response.error) {
-                Log.d("EventRepository", "Fetched events: ${response.listEvents}")
-                return response.listEvents?: emptyList()
+                return response.listEvents
             } else {
-                Log.e("EventRepository", "API Error: ${response.message}")
                 println("API Error: ${response.message}")
                 return emptyList()
             }
         } catch (e: Exception) {
-            Log.e("EventRepository", "Network Error: ${e.message}")
             println("Network Error: ${e.message}")
             return emptyList()
         }

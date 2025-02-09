@@ -20,7 +20,7 @@ class UpcomingViewModel(private val repository: EventRepository) : ViewModel() {
         loadEvents()
     }
 
-    fun loadEvents() {
+    private fun loadEvents() {
         _isLoading.value = true
         viewModelScope.launch {
             try {
