@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dicodingevent.R
 import com.example.dicodingevent.data.ApiConfig
 import com.example.dicodingevent.databinding.FragmentUpcomingBinding
 import com.example.dicodingevent.repository.EventRepository
 import com.example.dicodingevent.ui.common.VerticalEventAdapter
+import com.example.dicodingevent.utils.Navigation
 
 class UpcomingFragment : Fragment() {
 
@@ -37,7 +39,13 @@ class UpcomingFragment : Fragment() {
         rvVerticalEvents.layoutManager = LinearLayoutManager(context)
 
         viewModel.events.observe(viewLifecycleOwner) { events ->
-            verticalEventAdapter = VerticalEventAdapter(events)
+            verticalEventAdapter = VerticalEventAdapter(events) { eventId ->
+                Navigation.navigateToEventDetail(
+                    this,
+                    eventId.toString(),
+                    R.id.action_navigation_upcoming_to_navigation_detail
+                )
+            }
             rvVerticalEvents.adapter = verticalEventAdapter
 
             if (events.isEmpty()) {

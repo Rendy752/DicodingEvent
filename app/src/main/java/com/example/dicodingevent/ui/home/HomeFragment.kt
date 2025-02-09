@@ -79,7 +79,13 @@ class HomeFragment : Fragment() {
         rvFinishedEvents.layoutManager = LinearLayoutManager(context)
 
         viewModel.finishedEvents.observe(viewLifecycleOwner) { events ->
-            verticalEventAdapter = VerticalEventAdapter(events)
+            verticalEventAdapter = VerticalEventAdapter(events) { eventId ->
+                Navigation.navigateToEventDetail(
+                    this,
+                    eventId.toString(),
+                    R.id.action_navigation_home_to_navigation_detail
+                )
+            }
             rvFinishedEvents.adapter = verticalEventAdapter
 
             if (events.isEmpty()) {
