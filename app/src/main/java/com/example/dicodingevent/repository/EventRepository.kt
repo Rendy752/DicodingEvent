@@ -4,9 +4,8 @@ import com.example.dicodingevent.data.ApiService
 import com.example.dicodingevent.models.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class EventRepository @Inject constructor(private val apiService: ApiService) {
+class EventRepository(private val apiService: ApiService) {
 
     suspend fun getUpcomingEvents(query: String? = null, limit: Int? = 40): List<Event> =
         getEventsFromApi(active = 1, query = query, limit = limit)
