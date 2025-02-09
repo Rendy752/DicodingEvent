@@ -12,9 +12,11 @@ object Navigation {
             putString("id", eventId)
         }
         val navOptions = NavOptions.Builder()
-            .setPopUpTo(R.id.navigation_detail, true)
+            .setEnterAnim(R.anim.slide_in_right)
+            .setExitAnim(R.anim.slide_out_left)
+            .setPopEnterAnim(R.anim.slide_in_left)
+            .setPopExitAnim(R.anim.slide_out_right)
             .build()
-
         fragment.findNavController().navigate(
             actionId,
             bundle,
