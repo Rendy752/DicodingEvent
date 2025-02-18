@@ -35,4 +35,24 @@ class DetailViewModel(private val repository: EventRepository) : ViewModel() {
             }
         }
     }
+
+    fun insertFavoriteEvent(event: Event) {
+        viewModelScope.launch {
+            repository.insertFavoriteEvent(event)
+        }
+    }
+
+    fun deleteFavoriteEvent(event: Event) {
+        viewModelScope.launch {
+            repository.deleteFavoriteEvent(event)
+        }
+    }
+
+    fun isFavorite(id: Int): LiveData<Boolean> {
+        val isFavorite = MutableLiveData<Boolean>()
+        viewModelScope.launch {
+            isFavorite.value = repository.isFavorite(id)
+        }
+        return isFavorite
+    }
 }

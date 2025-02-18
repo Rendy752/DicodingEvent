@@ -29,6 +29,16 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/backgrounds/scenic" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/favorite_icon"
+            android:src="@drawable/ic_favorite_border_black_24dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivDetail"
+            app:layout_constraintEnd_toEndOf="@id/ivDetail" />
+
         <TextView
             android:id="@+id/tvName"
             android:layout_width="0dp"

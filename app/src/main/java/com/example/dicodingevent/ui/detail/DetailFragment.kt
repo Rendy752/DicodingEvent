@@ -33,6 +33,7 @@ class DetailFragment : Fragment() {
         }
         fetchEventDetail(viewModel)
         observeEventDetail(viewModel)
+        setupFavoriteButton(viewModel)
     }
 
     private fun fetchEventDetail(viewModel: DetailViewModel) {
@@ -56,7 +57,8 @@ class DetailFragment : Fragment() {
                 binding.tvOwner.text = getString(R.string.event_owner, event.ownerName)
                 val remainingQuota = event.quota - event.registrants
                 binding.tvRemainingQuota.text = getString(R.string.remaining_quota, remainingQuota)
-                binding.tvTime.text = getString(R.string.event_time, Date.formatDate(event.beginTime))
+                binding.tvTime.text =
+                    getString(R.string.event_time, Date.formatDate(event.beginTime))
                 binding.btnRegister.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW).apply {
                         data = Uri.parse(event.link)
@@ -77,5 +79,41 @@ class DetailFragment : Fragment() {
                 binding.emptyItem.root.visibility = View.GONE
             }
         }
+    }
+
+    private fun setupFavoriteButton(viewModel: DetailViewModel) {
+        var eventId: Int? = null
+        viewModel.event.observe(viewLifecycleOwner) { event ->
+            if (event != null) {
+                eventId = event.id
+
+                viewModel.isFavorite(event.id).observe(viewLifecycleOwner) { isFavorite ->
+                    updateFavoriteButtonIcon(isFavorite)
+
+                    binding.fabFavorite.setOnClickListener {
+                        if (isFavorite) {
+                            viewModel.deleteFavoriteEvent(event)
+                        } else {
+                            viewModel.insertFavoriteEvent(event)
+                        }
+                    }
+                }
+            }
+        }
+
+        if (eventId != null) {
+            viewModel.isFavorite(eventId!!).observe(viewLifecycleOwner) { isFavorite ->
+                updateFavoriteButtonIcon(isFavorite)
+            }
+        }
+    }
+
+    private fun updateFavoriteButtonIcon(isFavorite: Boolean) {
+        val icon = if (isFavorite) {
+            R.drawable.ic_favorite_red_24dp
+        } else {
+            R.drawable.ic_favorite_border_black_24dp
+        }
+        binding.fabFavorite.setImageResource(icon)
     }
 }
