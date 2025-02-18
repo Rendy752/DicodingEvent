@@ -4,6 +4,7 @@
     <string name="title_upcoming">Upcoming</string>
     <string name="title_finished">Finished</string>
     <string name="title_favorite">Favorite</string>
+    <string name="title_settings">Settings</string>
     <string name="upcoming_events">Upcoming Events</string>
     <string name="finished_events">Finished Events</string>
     <string name="dicoding_event">Dicoding Event</string>
@@ -18,4 +19,5 @@
     <string name="event_time">Waktu acara: %1$s</string>
     <string name="favorite_icon">Favorite Icon</string>
     <string name="recommendation_event_for_you">Recommendation event for you!</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>
