@@ -7,19 +7,18 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.CoroutineScope
 
 class Debounce(
-    private val coroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope = CoroutineScope(Job()),
     private val delayMillis: Long = 1000L,
-    private val viewModel: FinishedViewModel
+    private val viewModel: FinishedViewModel? = null
 ) {
-
     private var searchJob: Job? = null
 
     fun query(text: String) {
-        if (text != viewModel.queryState.value.query) {
+        if (text != viewModel?.queryState?.value?.query) {
             searchJob?.cancel()
             searchJob = coroutineScope.launch {
                 delay(delayMillis)
-                viewModel.updateQuery(text)
+                viewModel?.updateQuery(text)
             }
         }
     }

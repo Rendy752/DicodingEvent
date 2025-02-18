@@ -13,6 +13,9 @@ class DetailViewModel(private val repository: EventRepository) : ViewModel() {
     private val _event = MutableLiveData<Event>()
     val event: LiveData<Event> get() = _event
 
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite: LiveData<Boolean> = _isFavorite
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -36,23 +39,23 @@ class DetailViewModel(private val repository: EventRepository) : ViewModel() {
         }
     }
 
-    fun insertFavoriteEvent(event: Event) {
-        viewModelScope.launch {
-            repository.insertFavoriteEvent(event)
-        }
-    }
-
     fun deleteFavoriteEvent(event: Event) {
         viewModelScope.launch {
             repository.deleteFavoriteEvent(event)
+            _isFavorite.value = repository.isFavorite(event.id)
         }
     }
 
-    fun isFavorite(id: Int): LiveData<Boolean> {
-        val isFavorite = MutableLiveData<Boolean>()
+    fun insertFavoriteEvent(event: Event) {
         viewModelScope.launch {
-            isFavorite.value = repository.isFavorite(id)
+            repository.insertFavoriteEvent(event)
+            _isFavorite.value = repository.isFavorite(event.id)
         }
-        return isFavorite
+    }
+
+    fun isFavorite(id: Int) {
+        viewModelScope.launch {
+            _isFavorite.value = repository.isFavorite(id)
+        }
     }
 }

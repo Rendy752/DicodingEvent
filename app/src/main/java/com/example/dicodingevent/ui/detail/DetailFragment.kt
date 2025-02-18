@@ -82,28 +82,23 @@ class DetailFragment : Fragment() {
     }
 
     private fun setupFavoriteButton(viewModel: DetailViewModel) {
-        var eventId: Int? = null
         viewModel.event.observe(viewLifecycleOwner) { event ->
             if (event != null) {
-                eventId = event.id
+                viewModel.isFavorite(event.id)
 
-                viewModel.isFavorite(event.id).observe(viewLifecycleOwner) { isFavorite ->
+                viewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
                     updateFavoriteButtonIcon(isFavorite)
+                }
 
-                    binding.fabFavorite.setOnClickListener {
-                        if (isFavorite) {
-                            viewModel.deleteFavoriteEvent(event)
-                        } else {
-                            viewModel.insertFavoriteEvent(event)
-                        }
+                binding.fabFavorite.setOnClickListener {
+                    val latestEvent = viewModel.event.value ?: return@setOnClickListener
+
+                    if (viewModel.isFavorite.value == true) {
+                        viewModel.deleteFavoriteEvent(latestEvent)
+                    } else {
+                        viewModel.insertFavoriteEvent(latestEvent)
                     }
                 }
-            }
-        }
-
-        if (eventId != null) {
-            viewModel.isFavorite(eventId!!).observe(viewLifecycleOwner) { isFavorite ->
-                updateFavoriteButtonIcon(isFavorite)
             }
         }
     }
