@@ -6,7 +6,7 @@ import com.example.dicodingevent.data.remote.response.Event
 
 @Entity
 data class FavoriteEvent(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val name: String,
     val summary: String,
