@@ -9,9 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dicodingevent.R
-import com.example.dicodingevent.data.remote.retrofit.ApiConfig
 import com.example.dicodingevent.databinding.FragmentHomeBinding
-import com.example.dicodingevent.repository.EventRepository
 import com.example.dicodingevent.ui.common.HorizontalEventAdapter
 import com.example.dicodingevent.ui.common.VerticalEventAdapter
 import com.example.dicodingevent.utils.Navigation
@@ -25,9 +23,6 @@ class HomeFragment : Fragment() {
     private lateinit var verticalEventAdapter: VerticalEventAdapter
 
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels {
-        HomeViewModelFactory(EventRepository(ApiConfig.apiService))
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,11 +34,15 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadUpcomingEvents()
-        loadFinishedEvents()
+
+        val viewModel: HomeViewModel by viewModels {
+            HomeViewModelFactory.getInstance(requireActivity())
+        }
+        loadUpcomingEvents(viewModel)
+        loadFinishedEvents(viewModel)
     }
 
-    private fun loadUpcomingEvents() {
+    private fun loadUpcomingEvents(viewModel: HomeViewModel) {
         rvUpcomingEvents = binding.rvUpcomingEvents
         rvUpcomingEvents.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -74,7 +73,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun loadFinishedEvents() {
+    private fun loadFinishedEvents(viewModel: HomeViewModel) {
         rvFinishedEvents = binding.rvFinishedEvents
         rvFinishedEvents.layoutManager = LinearLayoutManager(context)
 

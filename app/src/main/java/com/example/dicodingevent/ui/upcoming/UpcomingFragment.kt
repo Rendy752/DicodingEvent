@@ -9,9 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dicodingevent.R
-import com.example.dicodingevent.data.remote.retrofit.ApiConfig
 import com.example.dicodingevent.databinding.FragmentUpcomingBinding
-import com.example.dicodingevent.repository.EventRepository
 import com.example.dicodingevent.ui.common.VerticalEventAdapter
 import com.example.dicodingevent.utils.Navigation
 
@@ -20,9 +18,6 @@ class UpcomingFragment : Fragment() {
     private lateinit var rvVerticalEvents: RecyclerView
     private lateinit var verticalEventAdapter: VerticalEventAdapter
     private lateinit var binding: FragmentUpcomingBinding
-    private val viewModel: UpcomingViewModel by viewModels {
-        UpcomingViewModelFactory(EventRepository(ApiConfig.apiService))
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +30,13 @@ class UpcomingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val viewModel: UpcomingViewModel by viewModels {
+            UpcomingViewModelFactory.getInstance(requireActivity())
+        }
+        loadEvents(viewModel)
+    }
+
+    private fun loadEvents(viewModel: UpcomingViewModel) {
         rvVerticalEvents = binding.rvVerticalEvents
         rvVerticalEvents.layoutManager = LinearLayoutManager(context)
 

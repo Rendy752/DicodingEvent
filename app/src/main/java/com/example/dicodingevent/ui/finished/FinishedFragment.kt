@@ -13,9 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dicodingevent.R
-import com.example.dicodingevent.data.remote.retrofit.ApiConfig
 import com.example.dicodingevent.databinding.FragmentFinishedBinding
-import com.example.dicodingevent.repository.EventRepository
 import com.example.dicodingevent.ui.common.VerticalEventAdapter
 import com.example.dicodingevent.utils.Debounce
 import com.example.dicodingevent.utils.Navigation
@@ -26,9 +24,6 @@ class FinishedFragment : Fragment() {
     private lateinit var rvVerticalEvents: RecyclerView
     private lateinit var verticalEventAdapter: VerticalEventAdapter
     private lateinit var binding: FragmentFinishedBinding
-    private val viewModel: FinishedViewModel by viewModels {
-        FinishedViewModelFactory(EventRepository(ApiConfig.apiService))
-    }
     private lateinit var debounce: Debounce
 
     override fun onCreateView(
@@ -42,13 +37,16 @@ class FinishedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val viewModel: FinishedViewModel by viewModels {
+            FinishedViewModelFactory.getInstance(requireActivity())
+        }
         rvVerticalEvents = binding.rvVerticalEvents
         rvVerticalEvents.layoutManager = LinearLayoutManager(context)
 
         debounce = Debounce(lifecycleScope, viewModel = viewModel)
 
         setupSearchBar()
-        observeEvents()
+        observeEvents(viewModel)
     }
 
     private fun setupSearchBar() {
@@ -64,7 +62,7 @@ class FinishedFragment : Fragment() {
         })
     }
 
-    private fun observeEvents() {
+    private fun observeEvents(viewModel: FinishedViewModel) {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.events.collectLatest { events ->
@@ -77,7 +75,8 @@ class FinishedFragment : Fragment() {
                     }
                     rvVerticalEvents.adapter = verticalEventAdapter
 
-                    binding.emptyItem.root.visibility = if (events.isEmpty()) View.VISIBLE else View.GONE
+                    binding.emptyItem.root.visibility =
+                        if (events.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
         }

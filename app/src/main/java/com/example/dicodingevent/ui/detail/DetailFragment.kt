@@ -11,16 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil3.load
 import com.example.dicodingevent.R
-import com.example.dicodingevent.data.remote.retrofit.ApiConfig
 import com.example.dicodingevent.databinding.FragmentDetailBinding
-import com.example.dicodingevent.repository.EventRepository
 import com.example.dicodingevent.utils.Date
 
 class DetailFragment : Fragment() {
     private lateinit var binding: FragmentDetailBinding
-    private val viewModel: DetailViewModel by viewModels {
-        DetailViewModelFactory(EventRepository(ApiConfig.apiService))
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,18 +27,22 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fetchEventDetail()
-        observeEventDetail()
+
+        val viewModel: DetailViewModel by viewModels {
+            DetailViewModelFactory.getInstance(requireActivity())
+        }
+        fetchEventDetail(viewModel)
+        observeEventDetail(viewModel)
     }
 
-    private fun fetchEventDetail() {
+    private fun fetchEventDetail(viewModel: DetailViewModel) {
         val eventId = arguments?.getString("id")
         if (eventId != null) {
             viewModel.loadEvents(eventId)
         }
     }
 
-    private fun observeEventDetail() {
+    private fun observeEventDetail(viewModel: DetailViewModel) {
         viewModel.event.observe(viewLifecycleOwner) { event ->
             if (event != null) {
                 binding.emptyItem.root.visibility = View.VISIBLE
