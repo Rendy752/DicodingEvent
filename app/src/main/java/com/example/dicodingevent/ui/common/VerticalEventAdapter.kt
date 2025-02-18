@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
 import com.example.dicodingevent.databinding.ItemEventVerticalBinding
-import com.example.dicodingevent.models.Event
+import com.example.dicodingevent.data.remote.response.Event
 
 class VerticalEventAdapter(
     private val events: List<Event>,

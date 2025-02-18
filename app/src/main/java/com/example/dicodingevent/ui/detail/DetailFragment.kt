@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil3.load
 import com.example.dicodingevent.R
-import com.example.dicodingevent.data.ApiConfig
+import com.example.dicodingevent.data.remote.retrofit.ApiConfig
 import com.example.dicodingevent.databinding.FragmentDetailBinding
 import com.example.dicodingevent.repository.EventRepository
 import com.example.dicodingevent.utils.Date

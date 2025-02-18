@@ -1,7 +1,7 @@
 package com.example.dicodingevent.repository
 
-import com.example.dicodingevent.data.ApiService
-import com.example.dicodingevent.models.Event
+import com.example.dicodingevent.data.remote.retrofit.ApiService
+import com.example.dicodingevent.data.remote.response.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

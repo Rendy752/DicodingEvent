@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dicodingevent.R
-import com.example.dicodingevent.data.ApiConfig
+import com.example.dicodingevent.data.remote.retrofit.ApiConfig
 import com.example.dicodingevent.databinding.FragmentHomeBinding
 import com.example.dicodingevent.repository.EventRepository
 import com.example.dicodingevent.ui.common.HorizontalEventAdapter

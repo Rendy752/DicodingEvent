@@ -1,4 +1,4 @@
-package com.example.dicodingevent.models
+package com.example.dicodingevent.data.remote.response
 
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package com.example.dicodingevent.data
+package com.example.dicodingevent.data.remote.retrofit
 
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
