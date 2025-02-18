@@ -20,4 +20,8 @@
     <string name="favorite_icon">Favorite Icon</string>
     <string name="recommendation_event_for_you">Recommendation event for you!</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="settings">Settings</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="daily_reminder_description">Enable daily reminder</string>
+    <string name="dark_mode_description">Enable dark mode</string>
 </resources>
