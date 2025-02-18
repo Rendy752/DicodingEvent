@@ -17,6 +17,8 @@ class EventRepository(private val apiService: ApiService, private val favoriteEv
     suspend fun getFinishedEvents(query: String? = null, limit: Int? = 40): List<Event> =
         getEventsFromApi(active = 0, query = query, limit = limit)
 
+    suspend fun getNewEvent(): Event = getEventsFromApi(active = -1, limit = 1).first()
+
     private suspend fun getEventsFromApi(
         active: Int,
         query: String? = null,

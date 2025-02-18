@@ -1,6 +1,7 @@
 package com.example.dicodingevent.ui
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +54,8 @@ class MainActivity : AppCompatActivity() {
         val sharedPrefs = getSharedPreferences("theme_prefs", Context.MODE_PRIVATE)
         val isDarkMode = sharedPrefs.getBoolean("is_dark_mode", false)
         setTheme(isDarkMode)
+
+        handleNotificationClick(intent)
     }
 
     private fun setTheme(isDarkMode: Boolean) {
@@ -60,6 +63,22 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let { handleNotificationClick(it) }
+    }
+
+    private fun handleNotificationClick(intent: Intent) {
+        val eventId = intent.getStringExtra("event_id")
+        if (eventId != null) {
+            val navController = findNavController(R.id.nav_host_fragment_activity_main)
+            val bundle = Bundle()
+            bundle.putString("event_id", eventId)
+            intent.putExtra("event_id", eventId)
+            navController.navigate(R.id.navigation_detail, bundle)
         }
     }
 }
