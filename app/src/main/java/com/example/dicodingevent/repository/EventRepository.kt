@@ -1,10 +1,10 @@
 package com.example.dicodingevent.repository
 
 import com.example.dicodingevent.data.local.entity.FavoriteEvent
-import com.example.dicodingevent.data.local.entity.toFavoriteEvent
 import com.example.dicodingevent.data.local.room.FavoriteEventDao
 import com.example.dicodingevent.data.remote.retrofit.ApiService
 import com.example.dicodingevent.data.remote.response.Event
+import com.example.dicodingevent.data.remote.response.toFavoriteEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

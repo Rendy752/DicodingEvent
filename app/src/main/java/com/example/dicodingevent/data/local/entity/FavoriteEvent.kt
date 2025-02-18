@@ -13,11 +13,21 @@ data class FavoriteEvent(
     val mediaCover: String
 )
 
-fun Event.toFavoriteEvent(): FavoriteEvent {
-    return FavoriteEvent(
+fun FavoriteEvent.toEvent(): Event {
+    return Event(
         id = this.id,
         name = this.name,
         summary = this.summary,
-        mediaCover = this.mediaCover
+        mediaCover = this.mediaCover,
+        description = "",
+        imageLogo = "",
+        category = "",
+        ownerName = "",
+        cityName = "",
+        quota = 0,
+        registrants = 0,
+        beginTime = "",
+        endTime = "",
+        link = ""
     )
 }
