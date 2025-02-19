@@ -63,48 +63,44 @@
             app:layout_constraintTop_toBottomOf="@id/tvName"
             tools:text="Event Summary" />
 
-        <LinearLayout
-            android:id="@+id/llOwnerAndTime"
+        <TextView
+            android:id="@+id/tvOwner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/container_background"
-            android:orientation="vertical"
+            android:gravity="center"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSummary">
+            app:layout_constraintTop_toBottomOf="@id/tvSummary"
+            tools:text="@string/event_owner" />
 
-            <TextView
-                android:id="@+id/tvOwner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                tools:text="@string/event_owner" />
+        <TextView
+            android:id="@+id/tvRemainingQuota"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/container_background"
+            android:gravity="center"
+            android:padding="8dp"
+            app:layout_constraintEnd_toStartOf="@id/tvTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvOwner"
+            tools:text="@string/remaining_quota" />
 
-            <LinearLayout
-                android:id="@+id/llTimeAndQuota"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvRemainingQuota"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    tools:text="@string/remaining_quota" />
-
-                <TextView
-                    android:id="@+id/tvTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    tools:text="@string/event_time" />
-
-            </LinearLayout>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/container_background"
+            android:gravity="center"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvRemainingQuota"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvRemainingQuota"
+            app:layout_constraintTop_toTopOf="@id/tvRemainingQuota"
+            tools:text="@string/event_time" />
 
         <TextView
             android:id="@+id/tvDescription"
@@ -113,7 +109,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/llOwnerAndTime"
+            app:layout_constraintTop_toBottomOf="@id/tvRemainingQuota"
             tools:text="Event Description" />
 
         <Button
