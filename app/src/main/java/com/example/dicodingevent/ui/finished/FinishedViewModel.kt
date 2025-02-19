@@ -20,6 +20,9 @@ class FinishedViewModel(private val repository: EventRepository) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
     private val _queryState = MutableStateFlow(QueryState())
     val queryState: StateFlow<QueryState> = _queryState.asStateFlow()
 
@@ -41,7 +44,7 @@ class FinishedViewModel(private val repository: EventRepository) : ViewModel() {
                 val fetchedEvents = repository.getFinishedEvents()
                 _events.value = fetchedEvents
             } catch (e: Exception) {
-                println("Error loading events: ${e.message}")
+                _errorMessage.value = e.message ?: "Unknown error"
                 _events.value = emptyList()
             } finally {
                 _isLoading.value = false
@@ -49,7 +52,7 @@ class FinishedViewModel(private val repository: EventRepository) : ViewModel() {
         }
     }
 
-    fun searchEvents(query: String?) {
+    private fun searchEvents(query: String?) {
         _queryState.update { it.copy(query = query ?: "") }
         _isLoading.value = true
         viewModelScope.launch {
@@ -57,11 +60,15 @@ class FinishedViewModel(private val repository: EventRepository) : ViewModel() {
                 val fetchedEvents = repository.getFinishedEvents(query = query)
                 _events.value = fetchedEvents
             } catch (e: Exception) {
-                println("Error loading events: ${e.message}")
+                _errorMessage.value = e.message ?: "Unknown error"
                 _events.value = emptyList()
             } finally {
                 _isLoading.value = false
             }
         }
+    }
+
+    fun resetErrorMessage() {
+        _errorMessage.value = null
     }
 }

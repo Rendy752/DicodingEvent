@@ -18,6 +18,10 @@
             android:id="@+id/loading"
             layout="@layout/loading_indicator" />
 
+        <include
+            android:id="@+id/error"
+            layout="@layout/error_message" />
+
         <ImageView
             android:id="@+id/ivDetail"
             android:layout_width="0dp"

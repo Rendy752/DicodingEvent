@@ -18,7 +18,6 @@
     <string name="remaining_quota">Sisa kuota: %1$d</string>
     <string name="event_time">Waktu acara: %1$s</string>
     <string name="favorite_icon">Favorite Icon</string>
-    <string name="recommendation_event_for_you">Recommendation event for you!</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="settings">Settings</string>
     <string name="daily_reminder">Daily Reminder</string>

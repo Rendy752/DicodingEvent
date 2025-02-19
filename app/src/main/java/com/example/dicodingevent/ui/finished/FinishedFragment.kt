@@ -20,7 +20,7 @@ import com.example.dicodingevent.utils.Navigation
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collectLatest
 
-class FinishedFragment : Fragment() {
+class FinishedFragment: Fragment() {
     private lateinit var rvVerticalEvents: RecyclerView
     private lateinit var verticalEventAdapter: VerticalEventAdapter
     private lateinit var binding: FragmentFinishedBinding
@@ -50,13 +50,13 @@ class FinishedFragment : Fragment() {
     }
 
     private fun setupSearchBar() {
-        binding.searchBar.svEvents.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.searchBar.svEvents.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                debounce.query(newText ?: "")
+                debounce.query(newText?: "")
                 return true
             }
         })
@@ -83,6 +83,16 @@ class FinishedFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.loading.root.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorMessage.collectLatest { errorMessage ->
+                    binding.error.message.visibility = if (errorMessage!= null) View.VISIBLE else View.GONE
+                    binding.error.message.text = errorMessage?: ""
+                    viewModel.resetErrorMessage()
+                }
+            }
         }
     }
 }

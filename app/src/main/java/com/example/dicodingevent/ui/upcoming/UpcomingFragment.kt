@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dicodingevent.R
 import com.example.dicodingevent.databinding.FragmentUpcomingBinding
 import com.example.dicodingevent.ui.common.VerticalEventAdapter
 import com.example.dicodingevent.utils.Navigation
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class UpcomingFragment : Fragment() {
 
@@ -62,6 +67,16 @@ class UpcomingFragment : Fragment() {
                 binding.loading.root.visibility = View.VISIBLE
             } else {
                 binding.loading.root.visibility = View.GONE
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorMessage.collectLatest { errorMessage ->
+                    binding.error.message.visibility = if (errorMessage!= null) View.VISIBLE else View.GONE
+                    binding.error.message.text = errorMessage?: ""
+                    viewModel.resetErrorMessage()
+                }
             }
         }
     }

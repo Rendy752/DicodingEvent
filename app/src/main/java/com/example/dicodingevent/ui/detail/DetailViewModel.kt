@@ -19,6 +19,9 @@ class DetailViewModel(private val repository: EventRepository) : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _errorMessages = MutableLiveData<String>()
+    val errorMessages: LiveData<String> = _errorMessages
+
     fun loadEvents(id: String?) {
         if (id != null) {
             getDetail(id)
@@ -32,7 +35,7 @@ class DetailViewModel(private val repository: EventRepository) : ViewModel() {
                 val fetchedEvent = repository.getEventDetail(id) ?: throw Exception("Event not found")
                 _event.value = fetchedEvent
             } catch (e: Exception) {
-                println("Error loading event detail: ${e.message}")
+                _errorMessages.value = e.message ?: "Unknown error"
             } finally {
                 _isLoading.value = false
             }

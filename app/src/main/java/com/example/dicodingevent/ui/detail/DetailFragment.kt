@@ -47,7 +47,7 @@ class DetailFragment : Fragment() {
         viewModel.event.observe(viewLifecycleOwner) { event ->
             if (event != null) {
                 with(binding) {
-                    emptyItem.root.visibility = View.VISIBLE
+                    emptyItem.root.visibility = View.GONE
                     ivDetail.load(event.mediaCover)
                     tvName.text = event.name
                     tvSummary.text = event.summary
@@ -67,8 +67,6 @@ class DetailFragment : Fragment() {
                         startActivity(intent)
                     }
                 }
-            } else {
-                binding.emptyItem.root.visibility = View.GONE
             }
         }
 
@@ -78,8 +76,18 @@ class DetailFragment : Fragment() {
                 binding.emptyItem.root.visibility = View.GONE
             } else {
                 binding.loading.root.visibility = View.GONE
-                binding.emptyItem.root.visibility = View.GONE
             }
+        }
+        viewModel.errorMessages.observe(viewLifecycleOwner) { message ->
+            if (message.isNotEmpty()) {
+                binding.apply {
+                    error.message.text = message
+                    error.message.visibility = View.VISIBLE
+                }
+            } else {
+                binding.error.message.visibility = View.GONE
+            }
+            binding.loading.root.visibility = View.GONE
         }
     }
 

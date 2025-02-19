@@ -12,6 +12,10 @@
         android:id="@+id/loading"
         layout="@layout/loading_indicator" />
 
+    <include
+        android:id="@+id/error"
+        layout="@layout/error_message" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvVerticalEvents"
         android:layout_width="match_parent"

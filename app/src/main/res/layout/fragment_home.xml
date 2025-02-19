@@ -32,6 +32,9 @@
         <include
             android:id="@+id/loadingUpcoming"
             layout="@layout/loading_indicator" />
+        <include
+            android:id="@+id/errorUpcoming"
+            layout="@layout/error_message" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUpcomingEvents"
             android:layout_width="match_parent"
@@ -52,6 +55,9 @@
         <include
             android:id="@+id/loadingFinished"
             layout="@layout/loading_indicator" />
+        <include
+            android:id="@+id/errorFinished"
+            layout="@layout/error_message" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFinishedEvents"
             android:layout_width="match_parent"
