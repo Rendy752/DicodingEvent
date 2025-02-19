@@ -25,13 +25,14 @@ class EventRepository(private val apiService: ApiService, private val favoriteEv
         limit: Int? = 40
     ): List<Event> = withContext(Dispatchers.IO) {
         try {
-            val response =
-                apiService.getEvents(active = active, q = query, limit = limit ?: 40)
+            val response = apiService.getEvents(active = active, q = query, limit = limit ?: 40)
             if (response.error) {
                 println("API Error: ${response.message}")
-                return@withContext emptyList()
+                emptyList()
+            } else {
+                 response.listEvents
+
             }
-            return@withContext response.listEvents
         } catch (e: Exception) {
             println("Network Error: ${e.message}")
             return@withContext emptyList()
@@ -41,11 +42,11 @@ class EventRepository(private val apiService: ApiService, private val favoriteEv
     suspend fun getEventDetail(id: String): Event? = withContext(Dispatchers.IO) {
         try {
             val response = apiService.getEventDetail(id)
-            if (!response.error) {
-                return@withContext response.event
+            return@withContext if (!response.error) {
+                response.event
             } else {
                 println("API Error: ${response.message}")
-                return@withContext null
+                null
             }
         } catch (e: Exception) {
             println("Network Error: ${e.message}")
