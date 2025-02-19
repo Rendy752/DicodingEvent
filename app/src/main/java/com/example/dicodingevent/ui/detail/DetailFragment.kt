@@ -46,24 +46,26 @@ class DetailFragment : Fragment() {
     private fun observeEventDetail(viewModel: DetailViewModel) {
         viewModel.event.observe(viewLifecycleOwner) { event ->
             if (event != null) {
-                binding.emptyItem.root.visibility = View.VISIBLE
-                binding.ivDetail.load(event.mediaCover)
-                binding.tvName.text = event.name
-                binding.tvSummary.text = event.summary
-                binding.tvDescription.text = HtmlCompat.fromHtml(
-                    event.description,
-                    HtmlCompat.FROM_HTML_MODE_LEGACY
-                )
-                binding.tvOwner.text = getString(R.string.event_owner, event.ownerName)
-                val remainingQuota = event.quota - event.registrants
-                binding.tvRemainingQuota.text = getString(R.string.remaining_quota, remainingQuota)
-                binding.tvTime.text =
-                    getString(R.string.event_time, Date.formatDate(event.beginTime))
-                binding.btnRegister.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW).apply {
-                        data = Uri.parse(event.link)
+                with(binding) {
+                    emptyItem.root.visibility = View.VISIBLE
+                    ivDetail.load(event.mediaCover)
+                    tvName.text = event.name
+                    tvSummary.text = event.summary
+                    tvDescription.text = HtmlCompat.fromHtml(
+                        event.description,
+                        HtmlCompat.FROM_HTML_MODE_LEGACY
+                    )
+                    tvOwner.text = getString(R.string.event_owner, event.ownerName)
+                    val remainingQuota = event.quota - event.registrants
+                    tvRemainingQuota.text = getString(R.string.remaining_quota, remainingQuota)
+                    tvTime.text =
+                        getString(R.string.event_time, Date.formatDate(event.beginTime))
+                    btnRegister.setOnClickListener {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse(event.link)
+                        }
+                        startActivity(intent)
                     }
-                    startActivity(intent)
                 }
             } else {
                 binding.emptyItem.root.visibility = View.GONE
