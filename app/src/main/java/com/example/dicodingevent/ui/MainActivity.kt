@@ -18,6 +18,10 @@ import com.example.dicodingevent.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val EVENT_ID_KEY = "event_id"
+    }
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,12 +76,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleNotificationClick(intent: Intent) {
-        val eventId = intent.getStringExtra("event_id")
+        val eventId = intent.getStringExtra(EVENT_ID_KEY)
         if (eventId != null) {
             val navController = findNavController(R.id.nav_host_fragment_activity_main)
             val bundle = Bundle()
-            bundle.putString("event_id", eventId)
-            intent.putExtra("event_id", eventId)
+            bundle.putString(EVENT_ID_KEY, eventId)
+            intent.putExtra(EVENT_ID_KEY, eventId)
             navController.navigate(R.id.navigation_detail, bundle)
         }
     }

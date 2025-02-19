@@ -37,7 +37,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun fetchEventDetail(viewModel: DetailViewModel) {
-        val eventId = arguments?.getString("id")
+        val eventId = arguments?.getString("event_id")
         if (eventId != null) {
             viewModel.loadEvents(eventId)
         }

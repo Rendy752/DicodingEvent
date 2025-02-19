@@ -7,9 +7,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.dicodingevent.R
 
 object Navigation {
+    private const val EVENT_ID_KEY = "event_id"
+
     fun navigateToEventDetail(fragment: Fragment, eventId: String, actionId: Int) {
         val bundle = Bundle().apply {
-            putString("id", eventId)
+            putString(EVENT_ID_KEY, eventId)
         }
         val navOptions = NavOptions.Builder()
             .setEnterAnim(R.anim.slide_in_right)
