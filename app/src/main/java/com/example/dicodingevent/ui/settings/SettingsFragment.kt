@@ -1,9 +1,6 @@
 package com.example.dicodingevent.ui.settings
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,17 +9,20 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.dicodingevent.data.remote.response.Event
 import com.example.dicodingevent.databinding.FragmentSettingsBinding
-import com.example.dicodingevent.utils.Constants
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
-class SettingsFragment : Fragment() {
+class SettingsFragment: Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
-    private lateinit var alarmManager: AlarmManager
-    private lateinit var pendingIntent: PendingIntent
     private lateinit var viewModel: SettingsViewModel
     private val sharedPrefs by lazy {
         requireActivity().getSharedPreferences(
@@ -63,16 +63,6 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupReminder() {
-        alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            Constants.REMINDER_REQUEST_CODE,
-            Intent(requireContext(), ReminderBroadcastReceiver::class.java).apply {
-                action = "com.dicodingevent.REMINDER_ACTION"
-            },
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
         val isReminderEnabled = sharedPrefs.getBoolean("is_reminder_enabled", false)
         binding.switchDailyReminder.isChecked = isReminderEnabled
         setReminder(isReminderEnabled)
@@ -95,14 +85,25 @@ class SettingsFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val event = viewModel.getNewEvent()
-                if (event != null) {
-                    val calendar = getAlarmCalendar()
-                    alarmManager.setRepeating(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.timeInMillis,
-                        AlarmManager.INTERVAL_DAY,
-                        pendingIntent
+                if (event!= null) {
+                    val constraints = Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .setTriggerContentMaxDelay(15, TimeUnit.MINUTES)
+                        .build()
+
+                    val reminderRequest = PeriodicWorkRequestBuilder<ReminderWorker>(
+                        1, TimeUnit.DAYS
                     )
+                        .setConstraints(constraints)
+                        .setInitialDelay(getInitialDelay(), TimeUnit.MILLISECONDS)
+                        .build()
+
+                    WorkManager.getInstance(requireContext()).enqueueUniquePeriodicWork(
+                        "daily_reminder",
+                        ExistingPeriodicWorkPolicy.UPDATE,
+                        reminderRequest
+                    )
+
                     saveEventDetails(event)
                 } else {
                     disableReminderAndSwitch()
@@ -113,22 +114,27 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun getAlarmCalendar(): Calendar {
-        return Calendar.getInstance().apply {
+    private fun getInitialDelay(): Long {
+        val now = Calendar.getInstance()
+        val targetTime = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 8)
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
-            if (timeInMillis <= System.currentTimeMillis()) {
-                add(Calendar.DAY_OF_YEAR, 1)
-            }
         }
+
+        if (now.after(targetTime)) {
+            targetTime.add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        return targetTime.timeInMillis - now.timeInMillis
     }
 
     private fun saveEventDetails(event: Event) {
-        val editor = sharedPrefs.edit()
-        editor.putString("event_name", event.name)
-        editor.putString("event_time", event.beginTime)
-        editor.apply()
+        with(sharedPrefs.edit()) {
+            putString("event_name", event.name)
+            putString("event_time", event.beginTime)
+            apply()
+        }
     }
 
     private fun disableReminderAndSwitch() {
@@ -142,7 +148,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun disableReminder() {
-        alarmManager.cancel(pendingIntent)
+        WorkManager.getInstance(requireContext()).cancelUniqueWork("daily_reminder")
     }
 
     private fun setTheme(isDarkMode: Boolean) {

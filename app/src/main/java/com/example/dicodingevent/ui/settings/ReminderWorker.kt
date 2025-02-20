@@ -3,29 +3,33 @@ package com.example.dicodingevent.ui.settings
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.example.dicodingevent.R
 import com.example.dicodingevent.ui.MainActivity
 import com.example.dicodingevent.utils.Constants
 
-class ReminderBroadcastReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val sharedPrefs = context.getSharedPreferences("reminder_prefs", Context.MODE_PRIVATE)
-        val eventName = sharedPrefs.getString("event_name", "")
-        val eventTime = sharedPrefs.getString("event_time", "")
+class ReminderWorker(private val context: Context, workerParams: WorkerParameters):
+    Worker(context, workerParams) {
 
-        if (!eventName.isNullOrEmpty() && !eventTime.isNullOrEmpty()) {
-            showReminderNotification(context, eventName, eventTime)
-        }
+    override fun doWork(): Result {
+        val sharedPrefs = context.getSharedPreferences("reminder_prefs", Context.MODE_PRIVATE)
+        val eventName = sharedPrefs.getString("event_name", "")?: ""
+        val eventTime = sharedPrefs.getString("event_time", "")?: ""
+
+        showReminderNotification(eventName, eventTime)
+
+        return Result.success()
     }
 
-    private fun showReminderNotification(context: Context, eventName: String, eventTime: String) {
+    private fun showReminderNotification(eventName: String, eventTime: String) {
         val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val channelId = "reminder_channel"
         val channelName = "Daily Reminder"
@@ -42,11 +46,11 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+        val pendingIntent = PendingIntent.getActivity(
             context,
             0,
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
